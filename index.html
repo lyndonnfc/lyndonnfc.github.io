@@ -343,10 +343,10 @@
 <p>避免服务状态和机器绑定，服务进行无状态化处理。</p>
 </blockquote>
 <h2 id="实际场景架构分析"><a href="#实际场景架构分析" class="headerlink" title="实际场景架构分析"></a>实际场景架构分析</h2><p><strong>架构是一种平衡的艺术，而最好的架构一旦脱离了它所适应的场景，一切都将是空谈</strong></p>
-<h4 id="TPS-1w-s-一下"><a href="#TPS-1w-s-一下" class="headerlink" title="TPS 1w/s 一下"></a>TPS 1w/s 一下</h4><blockquote>
+<h4 id="TPS-1w-s-以下"><a href="#TPS-1w-s-以下" class="headerlink" title="TPS 1w/s 以下"></a>TPS 1w/s 以下</h4><blockquote>
 <p>如果你想快速搭建一个简单的秒杀系统，只需要把你的商品购买页面增加一个“定时上架”功能，仅在秒杀开始时才让用户看到购买按钮，当商品的库存卖完了也就结束了。这就是当时第一个版本的秒杀系统实现方式。</p>
 </blockquote>
-<h4 id="TPS从-1w-s-到了-10w-s-的量级"><a href="#TPS从-1w-s-到了-10w-s-的量级" class="headerlink" title="TPS从 1w/s 到了 10w/s 的量级"></a>TPS从 1w/s 到了 10w/s 的量级</h4><blockquote>
+<h4 id="TPS-从-1w-s-到了-10w-s-的量级"><a href="#TPS-从-1w-s-到了-10w-s-的量级" class="headerlink" title="TPS 从 1w/s 到了 10w/s 的量级"></a>TPS 从 1w/s 到了 10w/s 的量级</h4><blockquote>
 <ol>
 <li>把秒杀系统独立出来单独打造一个系统，这样可以有针对性地做优化，例如这个独立出来的系统就减少了店铺装修的功能，减少了页面的复杂度；</li>
 <li>在系统部署上也独立做一个机器集群，这样秒杀的大流量就不会影响到正常的商品购买集群的机器负载；</li>
@@ -354,16 +354,16 @@
 <li>增加秒杀答题，防止有秒杀器抢单。</li>
 </ol>
 </blockquote>
-<p><strong><em>架构图如下</em></strong></p>
+<p><strong><em>架构图如下:</em></strong></p>
 <p><img src="seckill/1.jpg" alt="image1"></p>
-<h4 id="TPS从-10w-s-到了-100w-s-的量级"><a href="#TPS从-10w-s-到了-100w-s-的量级" class="headerlink" title="TPS从 10w/s 到了 100w/s 的量级"></a>TPS从 10w/s 到了 100w/s 的量级</h4><blockquote>
+<h4 id="TPS-从-10w-s-到了-100w-s-的量级"><a href="#TPS-从-10w-s-到了-100w-s-的量级" class="headerlink" title="TPS 从 10w/s 到了 100w/s 的量级"></a>TPS 从 10w/s 到了 100w/s 的量级</h4><blockquote>
 <ol>
 <li>对页面进行彻底的动静分离，使得用户秒杀时不需要刷新整个页面，而只需要点击抢宝按钮，借此把页面刷新的数据降到最少；</li>
 <li>在服务端对秒杀商品进行本地缓存，不需要再调用依赖系统的后台服务获取数据，甚至不需要去公共的缓存集群中查询数据，这样不仅可以减少系统调用，而且能够避免压垮公共缓存集群。</li>
 <li>增加系统限流保护，防止最坏情况发生。</li>
 </ol>
 </blockquote>
-<p><strong><em>架构图如下</em></strong></p>
+<p><strong><em>架构图如下:</em></strong></p>
 <p><img src="seckill/2.png" alt="image2"></p>
 
           
