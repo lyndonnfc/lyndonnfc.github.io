@@ -88,7 +88,8 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/09/26/images/image-20190926170923048.png">
 <meta property="og:image" content="http://yoursite.com/2019/09/26/images/image-20190926170823865.png">
-<meta property="og:updated_time" content="2019-09-26T09:09:25.415Z">
+<meta property="og:image" content="http://yoursite.com/2019/09/26/images/image-20190926171806225.png">
+<meta property="og:updated_time" content="2019-09-26T09:18:08.382Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何设计一个秒杀系统">
 <meta name="twitter:description" content="秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发 秒杀系统的架构原则1，数据要尽量少 用户请求的数据能少就尽量少； 系统依赖的数据能少就尽量少。  2，请求数要尽量少 去除额外的请求； 合并请求，减少请求的次数。  3，路径尽量短 所谓”路径”就是用户从发起请求到返回结果中间经过的节点数； 通过减少">
@@ -367,6 +368,7 @@
 </blockquote>
 <p><strong><em>架构图如下:</em></strong></p>
 <p><img src="../images/image-20190926170823865.png" alt="image-20190926170823865"></p>
+<h4 id="图片测试"><a href="#图片测试" class="headerlink" title="图片测试"></a>图片测试</h4><p><img src="../images/image-20190926171806225.png" alt="image-20190926171806225"></p>
 
       
     </div>
@@ -533,7 +535,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#秒杀系统的架构原则"><span class="nav-number">1.</span> <span class="nav-text">秒杀系统的架构原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，数据要尽量少"><span class="nav-number">1.1.</span> <span class="nav-text">1，数据要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，请求数要尽量少"><span class="nav-number">1.2.</span> <span class="nav-text">2，请求数要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，路径尽量短"><span class="nav-number">1.3.</span> <span class="nav-text">3，路径尽量短</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4，依赖要尽量少"><span class="nav-number">1.4.</span> <span class="nav-text">4，依赖要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5，不要有单点"><span class="nav-number">1.5.</span> <span class="nav-text">5，不要有单点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际场景架构分析"><span class="nav-number">2.</span> <span class="nav-text">实际场景架构分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TPS-1w-s-以下"><span class="nav-number">2.0.1.</span> <span class="nav-text">TPS 1w/s 以下</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TPS-从-1w-s-到了-10w-s-的量级"><span class="nav-number">2.0.2.</span> <span class="nav-text">TPS 从 1w/s 到了 10w/s 的量级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TPS-从-10w-s-到了-100w-s-的量级"><span class="nav-number">2.0.3.</span> <span class="nav-text">TPS 从 10w/s 到了 100w/s 的量级</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#秒杀系统的架构原则"><span class="nav-number">1.</span> <span class="nav-text">秒杀系统的架构原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，数据要尽量少"><span class="nav-number">1.1.</span> <span class="nav-text">1，数据要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，请求数要尽量少"><span class="nav-number">1.2.</span> <span class="nav-text">2，请求数要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，路径尽量短"><span class="nav-number">1.3.</span> <span class="nav-text">3，路径尽量短</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4，依赖要尽量少"><span class="nav-number">1.4.</span> <span class="nav-text">4，依赖要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5，不要有单点"><span class="nav-number">1.5.</span> <span class="nav-text">5，不要有单点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际场景架构分析"><span class="nav-number">2.</span> <span class="nav-text">实际场景架构分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TPS-1w-s-以下"><span class="nav-number">2.0.1.</span> <span class="nav-text">TPS 1w/s 以下</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TPS-从-1w-s-到了-10w-s-的量级"><span class="nav-number">2.0.2.</span> <span class="nav-text">TPS 从 1w/s 到了 10w/s 的量级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TPS-从-10w-s-到了-100w-s-的量级"><span class="nav-number">2.0.3.</span> <span class="nav-text">TPS 从 10w/s 到了 100w/s 的量级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#图片测试"><span class="nav-number">2.0.4.</span> <span class="nav-text">图片测试</span></a></li></ol></li></ol></div>
             
 
           </div>
