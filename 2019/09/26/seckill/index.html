@@ -86,14 +86,12 @@
 <meta property="og:site_name" content="Love sharing, love life">
 <meta property="og:description" content="秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发 秒杀系统的架构原则1，数据要尽量少 用户请求的数据能少就尽量少； 系统依赖的数据能少就尽量少。  2，请求数要尽量少 去除额外的请求； 合并请求，减少请求的次数。  3，路径尽量短 所谓”路径”就是用户从发起请求到返回结果中间经过的节点数； 通过减少">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/09/26/images/image-20190926170923048.png">
-<meta property="og:image" content="http://yoursite.com/2019/09/26/images/image-20190926170823865.png">
-<meta property="og:image" content="http://yoursite.com/2019/09/26/images/image-20190926171806225.png">
-<meta property="og:updated_time" content="2019-09-26T09:18:08.382Z">
+<meta property="og:image" content="http://yoursite.com/2019/09/26/seckill/images/image-20190926172636732.png">
+<meta property="og:updated_time" content="2019-09-26T09:26:39.824Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何设计一个秒杀系统">
 <meta name="twitter:description" content="秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发 秒杀系统的架构原则1，数据要尽量少 用户请求的数据能少就尽量少； 系统依赖的数据能少就尽量少。  2，请求数要尽量少 去除额外的请求； 合并请求，减少请求的次数。  3，路径尽量短 所谓”路径”就是用户从发起请求到返回结果中间经过的节点数； 通过减少">
-<meta name="twitter:image" content="http://yoursite.com/2019/09/26/images/image-20190926170923048.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/26/seckill/images/image-20190926172636732.png">
 
 
 
@@ -358,7 +356,7 @@
 </ol>
 </blockquote>
 <p><strong><em>架构图如下:</em></strong></p>
-<p><img src="../images/image-20190926170923048.png" alt="image-20190926170923048"></p>
+<p><img src="images/image-20190926172636732.png" alt="image-20190926172636732"></p>
 <h4 id="TPS-从-10w-s-到了-100w-s-的量级"><a href="#TPS-从-10w-s-到了-100w-s-的量级" class="headerlink" title="TPS 从 10w/s 到了 100w/s 的量级"></a>TPS 从 10w/s 到了 100w/s 的量级</h4><blockquote>
 <ol>
 <li>对页面进行彻底的动静分离，使得用户秒杀时不需要刷新整个页面，而只需要点击抢宝按钮，借此把页面刷新的数据降到最少；</li>
@@ -367,9 +365,7 @@
 </ol>
 </blockquote>
 <p><strong><em>架构图如下:</em></strong></p>
-<p><img src="../images/image-20190926170823865.png" alt="image-20190926170823865"></p>
-<h4 id="图片测试"><a href="#图片测试" class="headerlink" title="图片测试"></a>图片测试</h4><p><img src="../images/image-20190926171806225.png" alt="image-20190926171806225"></p>
-
+<h4 id="图片测试"><a href="#图片测试" class="headerlink" title="图片测试"></a>图片测试</h4>
       
     </div>
     
