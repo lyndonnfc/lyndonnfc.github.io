@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/09/26/seckill/seckill/1.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/09/26/seckill/seckill/2.png">
-<meta property="og:updated_time" content="2019-09-26T07:52:43.195Z">
+<meta property="og:updated_time" content="2019-09-26T07:54:17.773Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何设计一个秒杀系统">
 <meta name="twitter:description" content="秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发 秒杀系统的架构原则1，数据要尽量少 用户请求的数据能少就尽量少； 系统依赖的数据能少就尽量少。  2，请求数要尽量少 去除额外的请求； 合并请求，减少请求的次数。  3，路径尽量短 所谓”路径”就是用户从发起请求到返回结果中间经过的节点数； 通过减少">
@@ -357,7 +357,7 @@
 </ol>
 </blockquote>
 <p><strong><em>架构图如下</em></strong></p>
-<p><img src="seckill/1.jpg" alt="image"></p>
+<p><img src="seckill/1.jpg" alt="image1"></p>
 <h4 id="TPS从-10w-s-到了-100w-s-的量级"><a href="#TPS从-10w-s-到了-100w-s-的量级" class="headerlink" title="TPS从 10w/s 到了 100w/s 的量级"></a>TPS从 10w/s 到了 100w/s 的量级</h4><blockquote>
 <ol>
 <li>对页面进行彻底的动静分离，使得用户秒杀时不需要刷新整个页面，而只需要点击抢宝按钮，借此把页面刷新的数据降到最少；</li>
@@ -366,7 +366,7 @@
 </ol>
 </blockquote>
 <p><strong><em>架构图如下</em></strong></p>
-<p><img src="seckill/2.png" alt="image"></p>
+<p><img src="seckill/2.png" alt="image2"></p>
 
       
     </div>
