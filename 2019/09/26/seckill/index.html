@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="架构,">
 
 
 
@@ -79,19 +79,20 @@
 
 
 
-<meta name="description" content="秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发 秒杀系统的架构原则1，数据要尽量少 用户请求的数据能少就尽量少； 系统依赖的数据能少就尽量少。  2，请求数要尽量少 去除额外的请求； 合并请求，减少请求的次数。  3，路径尽量短 所谓”路径”就是用户从发起请求到返回结果中间经过的节点数； 通过减少">
+<meta name="description" content="通过这段时间在极客时间的学习，对秒杀系统的整体设计有了一个完整的了解，结合之前做过的一些案例，把个人的学习过程分享出来，相互学习和成长。 秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发">
+<meta name="keywords" content="架构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何设计一个秒杀系统">
 <meta property="og:url" content="http://yoursite.com/2019/09/26/seckill/index.html">
 <meta property="og:site_name" content="Love sharing, love life">
-<meta property="og:description" content="秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发 秒杀系统的架构原则1，数据要尽量少 用户请求的数据能少就尽量少； 系统依赖的数据能少就尽量少。  2，请求数要尽量少 去除额外的请求； 合并请求，减少请求的次数。  3，路径尽量短 所谓”路径”就是用户从发起请求到返回结果中间经过的节点数； 通过减少">
+<meta property="og:description" content="通过这段时间在极客时间的学习，对秒杀系统的整体设计有了一个完整的了解，结合之前做过的一些案例，把个人的学习过程分享出来，相互学习和成长。 秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g7ualf3mubj312a0p2gro.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g7uambqq7ej313c0pizqj.jpg">
-<meta property="og:updated_time" content="2019-10-11T07:33:46.268Z">
+<meta property="og:updated_time" content="2019-10-11T08:00:14.703Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何设计一个秒杀系统">
-<meta name="twitter:description" content="秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发 秒杀系统的架构原则1，数据要尽量少 用户请求的数据能少就尽量少； 系统依赖的数据能少就尽量少。  2，请求数要尽量少 去除额外的请求； 合并请求，减少请求的次数。  3，路径尽量短 所谓”路径”就是用户从发起请求到返回结果中间经过的节点数； 通过减少">
+<meta name="twitter:description" content="通过这段时间在极客时间的学习，对秒杀系统的整体设计有了一个完整的了解，结合之前做过的一些案例，把个人的学习过程分享出来，相互学习和成长。 秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发">
 <meta name="twitter:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g7ualf3mubj312a0p2gro.jpg">
 
 
@@ -295,6 +296,28 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/架构设计/" itemprop="url" rel="index">
+                    <span itemprop="name">架构设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -322,8 +345,11 @@
       
 
       
-        <p><strong>秒杀其实主要解决两个问题，一个是并发读，一个是并发写</strong></p>
+        <p><strong>通过这段时间在极客时间的学习，对秒杀系统的整体设计有了一个完整的了解，结合之前做过的一些案例，把个人的学习过程分享出来，相互学习和成长。</strong></p>
+<p><strong>秒杀其实主要解决两个问题，一个是并发读，一个是并发写</strong></p>
 <p><strong>其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发</strong></p>
+<a id="more"></a>
+
 <h2 id="秒杀系统的架构原则"><a href="#秒杀系统的架构原则" class="headerlink" title="秒杀系统的架构原则"></a>秒杀系统的架构原则</h2><h3 id="1，数据要尽量少"><a href="#1，数据要尽量少" class="headerlink" title="1，数据要尽量少"></a>1，数据要尽量少</h3><blockquote>
 <p>用户请求的数据能少就尽量少；</p>
 <p>系统依赖的数据能少就尽量少。</p>
@@ -381,6 +407,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/架构/" rel="tag"># 架构</a>
+          
+        </div>
+      
 
       
       
@@ -390,8 +422,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/21/网络协议/" rel="next" title="网络协议">
-                <i class="fa fa-chevron-left"></i> 网络协议
+              <a href="/2019/09/11/group/" rel="next" title="中小团队建设">
+                <i class="fa fa-chevron-left"></i> 中小团队建设
               </a>
             
           </div>
@@ -477,7 +509,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -488,7 +520,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -499,7 +531,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
