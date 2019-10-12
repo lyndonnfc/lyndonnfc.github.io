@@ -90,7 +90,10 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g7ualf3mubj312a0p2gro.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g7uambqq7ej313c0pizqj.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g7udm2o92sj311m0b0gn4.jpg">
-<meta property="og:updated_time" content="2019-10-11T09:24:45.463Z">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g7vkjhdoq1j30u00yp40p.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g7vkqhw6tnj30u011pjts.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6gy1g7vkuviqmgj30qf0qa3zv.jpg">
+<meta property="og:updated_time" content="2019-10-12T10:13:15.752Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何设计一个秒杀系统">
 <meta name="twitter:description" content="通过这段时间在极客时间的学习，对秒杀系统的整体设计有了一个完整的了解，结合之前做过的一些案例，把个人的学习过程分享出来，相互学习和成长。 秒杀其实主要解决两个问题，一个是并发读，一个是并发写 其实，秒杀的整体架构可以概括为“稳、准、快”几个关键字，也就是我们常说的高可用，一致性，高并发">
@@ -393,7 +396,7 @@
 </ol>
 </blockquote>
 <p><strong><em>架构图如下:</em></strong><br><img src="https://tva1.sinaimg.cn/large/006y8mN6gy1g7uambqq7ej313c0pizqj.jpg" alt="images-201910111528"></p>
-<h2 id="秒杀系统中的动静分离"><a href="#秒杀系统中的动静分离" class="headerlink" title="秒杀系统中的动静分离"></a>秒杀系统中的动静分离</h2><p><strong>在秒杀系统中，为了让我们的系统足够“快”，总结就只有两点，一点是提高单次请求的效率，一点是减少没必要的请求。这个时候总结动静分离就是我们需要解决问题的方向。</strong></p>
+<h2 id="秒杀系统中的动静分离"><a href="#秒杀系统中的动静分离" class="headerlink" title="秒杀系统中的动静分离"></a>秒杀系统中的动静分离</h2><p><strong>在秒杀系统中，为了让我们的系统足够“快”，总结就只有两点，一点是提高单次请求的效率，一点是减少没必要的请求。这个时候动静分离就为我们解决问题提供了方向。</strong></p>
 <h3 id="什么是动静分离"><a href="#什么是动静分离" class="headerlink" title="什么是动静分离"></a>什么是动静分离</h3><blockquote>
 <p>就是把用户请求的数据（如 HTML 页面）划分为“动态数据”和“静态数据”。</p>
 <p>简单来说，<strong>“动态数据”和“静态数据”的主要区别就是看页面中输出的数据是否和 URL、浏览者、时间、地域相关，以及是否含有 Cookie 等私密数据</strong>。</p>
@@ -406,7 +409,58 @@
 </blockquote>
 <p><strong><em>静态化改造如下:（Web 代理服务器根据请求 URL，直接取出对应的 HTTP 响应头和响应体然后直接返回，这个响应过程简单得连 HTTP 协议都不用重新组装，甚至连 HTTP 请求头也不需要解析。）</em></strong></p>
 <p><img src="https://tva1.sinaimg.cn/large/006y8mN6gy1g7udm2o92sj311m0b0gn4.jpg" alt="images-gn4"></p>
-
+<h3 id="如何做动静分离的改造"><a href="#如何做动静分离的改造" class="headerlink" title="如何做动静分离的改造"></a>如何做动静分离的改造</h3><p><strong>1，URL唯一化。</strong> 商品详情系统天然地就可以做到 URL 唯一化，比如每个商品都由 ID 来标识，那么 <a href="http://item.xxx.com/item.htm?id=xxxx" target="_blank" rel="noopener">http://item.xxx.com/item.htm?id=xxxx</a> 就可以作为唯一的 URL 标识。为啥要 URL 唯一呢？前面说了我们是要缓存整个 HTTP 连接，那么以什么作为 Key 呢？就以 URL 作为缓存的 Key，例如以 id=xxx 这个格式进行区分。</p>
+<p><strong>2，分离浏览器相关的因素。</strong> 浏览者相关的因素包括是否已登录，以及登录身份等，这些相关因素我们可以单独拆分出来，通过动态请求来获取。</p>
+<p><strong>3，分离时间因素。</strong>服务端输出的时间也通过动态请求来获取</p>
+<p><strong>4，异步化地域因素。</strong> 详情页面上与地域相关的因素做成异步方式获取，当然你也可以通过动态请求方式获取，只是这里通过异步获取更合适。</p>
+<p><strong>5，去掉 Cookie。</strong> 服务端输出的页面包含的 Cookie 可以通过代码软件来删除，如 Web 服务器 Varnish 可以通过 unset req.http.cookie 命令去掉 Cookie。注意，这里说的去掉 Cookie 并不是用户端收到的页面就不含 Cookie 了，而是说，在缓存的静态数据中不含有 Cookie。</p>
+<h3 id="动态内容的处理方案"><a href="#动态内容的处理方案" class="headerlink" title="动态内容的处理方案"></a>动态内容的处理方案</h3><p><strong>1，ESI方案（或者SSI）：</strong>即在 Web 代理服务器上做动态内容请求，并将请求插入到静态页面中，当用户拿到页面时已经是一个完整的页面了。这种方式对服务端性能有些影响，但是用户体验较好。</p>
+<p><strong>2，CSI方案：</strong>即单独发起一个异步 JavaScript 请求，以向服务端获取动态内容。这种方式服务端性能更佳，但是用户端页面可能会延时，体验稍差。</p>
+<h3 id="动静分离的架构方案"><a href="#动静分离的架构方案" class="headerlink" title="动静分离的架构方案"></a>动静分离的架构方案</h3><p><strong>1，实体机单一部署：</strong></p>
+<p>这种方案是将虚拟机改为实体机，以增大 Cache 的容量，并且采用了一致性 Hash 分组的方式来提升命中率。这里将 Cache 分成若干组，是希望能达到命中率和访问热点的平衡。Hash 分组越少，缓存的命中率肯定就会越高，但短板是也会使单个商品集中在一个分组中，容易导致 Cache 被击穿，所以我们应该适当增加多个相同的分组，来平衡访问热点和命中率的问题。</p>
+<p><strong>优点：</strong></p>
+<blockquote>
+<ol>
+<li>没有网络瓶颈，而且能使用大内存；</li>
+<li>既能提升命中率，又能减少 Gzip 压缩；</li>
+<li>减少 Cache 失效压力，因为采用定时失效方式，例如只缓存 3 秒钟，过期即自动失效。</li>
+</ol>
+</blockquote>
+<p><strong>架构图：</strong></p>
+<p><img src="https://tva1.sinaimg.cn/large/006y8mN6gy1g7vkjhdoq1j30u00yp40p.jpg" alt="images-danyi"></p>
+<p><strong>2，统一Cache层</strong></p>
+<p>所谓统一 Cache 层，就是将单机的 Cache 统一分离出来，形成一个单独的 Cache 集群。</p>
+<p><strong>优点：</strong></p>
+<blockquote>
+<ol>
+<li>单独一个 Cache 层，可以减少多个应用接入时使用 Cache 的成本。这样接入的应用只要维护自己的 Java 系统就好，不需要单独维护 Cache，而只关心如何使用即可。</li>
+<li>统一 Cache 的方案更易于维护，如后面加强监控、配置的自动化，只需要一套解决方案就行，统一起来维护升级也比较方便。</li>
+<li>可以共享内存，最大化利用内存，不同系统之间的内存可以动态切换，从而能够有效应对各种攻击。</li>
+</ol>
+</blockquote>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<ol>
+<li>Cache 层内部交换网络成为瓶颈；</li>
+<li>缓存服务器的网卡也会是瓶颈；</li>
+<li>机器少风险较大，挂掉一台就会影响很大一部分缓存数据。</li>
+</ol>
+</blockquote>
+<p><strong>架构图：</strong></p>
+<p><img src="https://tva1.sinaimg.cn/large/006y8mN6gy1g7vkqhw6tnj30u011pjts.jpg" alt="images-cache"></p>
+<p><strong>3，上CDN。</strong></p>
+<p>在将整个系统做动静分离后，我们自然会想到更进一步的方案，就是将 Cache 进一步前移到 CDN 上，因为 CDN 离用户最近，效果会更好。</p>
+<p>但是要想这么做，有以下几个问题需要解决。</p>
+<blockquote>
+<ol>
+<li><strong>失效问题</strong>。前面我们也有提到过缓存时效的问题，不知道你有没有理解，我再来解释一下。谈到静态数据时，我说过一个关键词叫“相对不变”，它的言外之意是“可能会变化”。比如一篇文章，现在不变，但如果你发现个错别字，是不是就会变化了？如果你的缓存时效很长，那用户端在很长一段时间内看到的都是错的。所以，这个方案中也是，我们需要保证 CDN 可以在秒级时间内，让分布在全国各地的 Cache 同时失效，这对 CDN 的失效系统要求很高。</li>
+<li><strong>命中率问题</strong>。Cache 最重要的一个衡量指标就是“高命中率”，不然 Cache 的存在就失去了意义。同样，如果将数据全部放到全国的 CDN 上，必然导致 Cache 分散，而 Cache 分散又会导致访问请求命中同一个 Cache 的可能性降低，那么命中率就成为一个问题。</li>
+<li><strong>发布更新问题</strong>。如果一个业务系统每周都有日常业务需要发布，那么发布系统必须足够简洁高效，而且你还要考虑有问题时快速回滚和排查问题的简便性。</li>
+</ol>
+</blockquote>
+<p><strong>架构图：</strong></p>
+<p><img src="https://tva1.sinaimg.cn/large/006y8mN6gy1g7vkuviqmgj30qf0qa3zv.jpg" alt="images-cdn"></p>
+<h2 id="二八原则：有针对性地处理好系统的“热点数据”"><a href="#二八原则：有针对性地处理好系统的“热点数据”" class="headerlink" title="二八原则：有针对性地处理好系统的“热点数据”"></a>二八原则：有针对性地处理好系统的“热点数据”</h2>
       
     </div>
     
@@ -578,7 +632,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#秒杀系统的架构原则"><span class="nav-number">1.</span> <span class="nav-text">秒杀系统的架构原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据要尽量少"><span class="nav-number">1.1.</span> <span class="nav-text">数据要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求数要尽量少"><span class="nav-number">1.2.</span> <span class="nav-text">请求数要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路径尽量短"><span class="nav-number">1.3.</span> <span class="nav-text">路径尽量短</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖要尽量少"><span class="nav-number">1.4.</span> <span class="nav-text">依赖要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不要有单点"><span class="nav-number">1.5.</span> <span class="nav-text">不要有单点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际场景架构分析"><span class="nav-number">2.</span> <span class="nav-text">实际场景架构分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TPS-1w-s-以下"><span class="nav-number">2.1.</span> <span class="nav-text">TPS 1w/s 以下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TPS-从-1w-s-到了-10w-s-的量级"><span class="nav-number">2.2.</span> <span class="nav-text">TPS 从 1w/s 到了 10w/s 的量级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TPS-从-10w-s-到了-100w-s-的量级"><span class="nav-number">2.3.</span> <span class="nav-text">TPS 从 10w/s 到了 100w/s 的量级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#秒杀系统中的动静分离"><span class="nav-number">3.</span> <span class="nav-text">秒杀系统中的动静分离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是动静分离"><span class="nav-number">3.1.</span> <span class="nav-text">什么是动静分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态数据如何做缓存"><span class="nav-number">3.2.</span> <span class="nav-text">静态数据如何做缓存</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#秒杀系统的架构原则"><span class="nav-number">1.</span> <span class="nav-text">秒杀系统的架构原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据要尽量少"><span class="nav-number">1.1.</span> <span class="nav-text">数据要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求数要尽量少"><span class="nav-number">1.2.</span> <span class="nav-text">请求数要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路径尽量短"><span class="nav-number">1.3.</span> <span class="nav-text">路径尽量短</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖要尽量少"><span class="nav-number">1.4.</span> <span class="nav-text">依赖要尽量少</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不要有单点"><span class="nav-number">1.5.</span> <span class="nav-text">不要有单点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际场景架构分析"><span class="nav-number">2.</span> <span class="nav-text">实际场景架构分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TPS-1w-s-以下"><span class="nav-number">2.1.</span> <span class="nav-text">TPS 1w/s 以下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TPS-从-1w-s-到了-10w-s-的量级"><span class="nav-number">2.2.</span> <span class="nav-text">TPS 从 1w/s 到了 10w/s 的量级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TPS-从-10w-s-到了-100w-s-的量级"><span class="nav-number">2.3.</span> <span class="nav-text">TPS 从 10w/s 到了 100w/s 的量级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#秒杀系统中的动静分离"><span class="nav-number">3.</span> <span class="nav-text">秒杀系统中的动静分离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是动静分离"><span class="nav-number">3.1.</span> <span class="nav-text">什么是动静分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态数据如何做缓存"><span class="nav-number">3.2.</span> <span class="nav-text">静态数据如何做缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何做动静分离的改造"><span class="nav-number">3.3.</span> <span class="nav-text">如何做动静分离的改造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态内容的处理方案"><span class="nav-number">3.4.</span> <span class="nav-text">动态内容的处理方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动静分离的架构方案"><span class="nav-number">3.5.</span> <span class="nav-text">动静分离的架构方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二八原则：有针对性地处理好系统的“热点数据”"><span class="nav-number">4.</span> <span class="nav-text">二八原则：有针对性地处理好系统的“热点数据”</span></a></li></ol></div>
             
 
           </div>
